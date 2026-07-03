@@ -1,0 +1,22 @@
+{
+	"name": "adb-plugin-reminders",
+	"displayName": "Reminders",
+	"version": "1.0.0",
+	"description": "Adds /remind to set, list, and cancel personal reminders. Delivers via DM with a channel fallback.",
+	"author": "DeadIndian",
+	"main": "index.js",
+	"requiresRestart": false,
+	"permissions": ["db.read", "db.write", "commands.register"],
+	"configSchema": {
+		"type": "object",
+		"properties": {
+			"maxPerUser": {
+				"type": "number",
+				"default": 25,
+				"minimum": 1,
+				"maximum": 200,
+				"description": "Max active reminders a single user can have per server"
+			}
+		}
+	}
+}
