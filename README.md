@@ -1,6 +1,6 @@
 # adb-plugin-reminders
 
-Personal reminders for [Advanced Discord Bot](https://github.com/DeadIndian/Advanced-Discord-Bot).
+Personal reminders for [Advanced Discord Bot](https://github.com/AdvancedDiscordBot/Advanced-Discord-Bot).
 
 `/remind set time:10m message:"check the oven"` — bot DMs you when it's due (falls back to the channel you set it in if DMs are closed).
 
@@ -57,4 +57,10 @@ See `REGISTRY-SETUP.md` in the main ADB repo. Short version: fork the registry r
 
 ## License
 
-MIT
+This project is licensed under the **GNU Affero General Public License v3.0**. See the [LICENSE](LICENSE) file for details.
+
+This repository follows the policies of the main ADB project.
+
+- **Contribution Guidelines**: [CONTRIBUTING.md](https://github.com/AdvancedDiscordBot/Advanced-Discord-Bot/blob/main/CONTRIBUTING.md)
+- **Code of Conduct**: [CODE_OF_CONDUCT.md](https://github.com/AdvancedDiscordBot/Advanced-Discord-Bot/blob/main/CODE_OF_CONDUCT.md)
+- **Security Policy**: [SECURITY.md](https://github.com/AdvancedDiscordBot/Advanced-Discord-Bot/blob/main/SECURITY.md)
