@@ -1,29 +1,45 @@
 {
-  "name": "adb-plugin-reminders",
-  "displayName": "Reminders",
-  "version": "1.0.0",
-  "description": "Adds /remind to set, list, and cancel personal reminders. Delivers via DM with a channel fallback.",
-  "author": "DeadIndian",
-  "main": "index.js",
-  "requiresRestart": false,
-  "permissions": [
-    "db.read",
-    "db.write",
-    "commands.register"
-  ],
-  "discordPermissions": [
-    "SendMessages"
-  ],
-  "configSchema": {
-    "type": "object",
-    "properties": {
-      "maxPerUser": {
-        "type": "number",
-        "default": 25,
-        "minimum": 1,
-        "maximum": 200,
-        "description": "Max active reminders a single user can have per server"
-      }
-    }
-  }
+	"name": "adb-plugin-reminders",
+	"displayName": "Reminders",
+	"version": "1.1.0",
+	"description": "Adds /remind to set, list, and cancel personal reminders. Delivers via DM with a channel fallback.",
+	"author": "DeadIndian",
+	"main": "index.js",
+	"requiresRestart": false,
+	"isolation": true,
+	"manifestVersion": 2,
+	"process": {
+		"model": "pooled",
+		"maxExecutionMs": 5000,
+		"memoryMb": 128,
+		"persistentReason": null
+	},
+	"capabilities": {
+		"storage": ["own-collection"],
+		"discord": ["SendMessages"],
+		"scheduler": ["cron"]
+	},
+	"permissions": {
+		"storage": ["own-collection"],
+		"discord": ["SendMessages"],
+		"scheduler": ["cron"],
+		"network": { "outbound": [] },
+		"filesystem": { "read": [], "write": [] },
+		"childProcess": false,
+		"nativeAddons": false
+	},
+	"declaredDependencies": [],
+	"discordPermissions": ["SendMessages"],
+	"configSchema": {
+		"type": "object",
+		"properties": {
+			"maxPerUser": {
+				"type": "number",
+				"default": 25,
+				"minimum": 1,
+				"maximum": 200,
+				"description": "Max active reminders a single user can have per server"
+			}
+		}
+	}
 }

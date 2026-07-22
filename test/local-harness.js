@@ -1,4 +1,8 @@
 // Run with: npm test  (or) node test/local-harness.js
+//
+// Offline smoke test for adb-plugin-reminders against the ISOLATED mock ctx
+// (test/mock-ctx.js) — null client, RPC-style models, ctx.scheduler,
+// ctx.discord. No running bot / no Mongo / no node-cron.
 
 const assert = require("node:assert");
 const { load } = require("../index.js");
@@ -27,11 +31,16 @@ async function main() {
 	assert.strictEqual(parseDuration("10m"), 10 * 60 * 1000);
 	assert.strictEqual(parseDuration("garbage"), null);
 
-	const { ctx, commands } = createMockCtx();
+	const { ctx, registeredCommands, models, sent, scheduled, runTask } = createMockCtx({
+		pluginName: "adb-plugin-reminders",
+	});
 	await load(ctx);
 
-	assert.ok(commands.has("remind"), "expected /remind to be registered");
-	const remind = commands.get("remind");
+	assert.ok(registeredCommands.has("remind"), "expected /remind to be registered");
+	const remind = registeredCommands.get("remind");
+
+	// The plugin must register its delivery task via ctx.scheduler (NOT node-cron).
+	assert.ok(scheduled.has("deliver-due-reminders"), "expected scheduler task to be registered");
 
 	const setInteraction = fakeInteraction({ subcommand: "set", strings: { time: "10m", message: "check the oven" } });
 	await remind.execute(setInteraction);
@@ -45,8 +54,29 @@ async function main() {
 	await remind.execute(badTimeInteraction);
 	assert.match(badTimeInteraction.replies[0].content, /Invalid time format/);
 
+	// --- Delivery: force a due reminder, fire the scheduled task, assert it went
+	// out via ctx.discord and got marked notified. ---
+	const model = models.get("plugin_adb-plugin-reminders_reminder");
+	// backdate the pending reminder so it's due
+	model._store.forEach((r) => {
+		r.remindAt = new Date(Date.now() - 1000);
+	});
+	await runTask("deliver-due-reminders");
+	assert.strictEqual(sent.length, 1, "expected one delivery");
+	assert.strictEqual(sent[0].kind, "dm", "reminder delivered via DM");
+	assert.match(sent[0].payload.content, /check the oven/);
+	const remaining = await model.find({ notified: false });
+	assert.strictEqual(remaining.length, 0, "delivered reminder marked notified");
+
+	// cancel path
+	const setAgain = fakeInteraction({ subcommand: "set", strings: { time: "5m", message: "call mom" } });
+	await remind.execute(setAgain);
+	const id = setAgain.replies[0].content.match(/id: `([^`]+)`/)[1];
+	const cancel = fakeInteraction({ subcommand: "cancel", strings: { id } });
+	await remind.execute(cancel);
+	assert.match(cancel.replies[0].content, /Reminder cancelled/);
+
 	console.log("OK: all local-harness checks passed");
-	process.exit(0); // node-cron in index.js keeps the event loop alive otherwise
 }
 
 main().catch((error) => {

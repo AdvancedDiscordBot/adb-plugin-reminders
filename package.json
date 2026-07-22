@@ -1,6 +1,6 @@
 {
   "name": "adb-plugin-reminders",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Personal reminders (/remind set/list/cancel) for Advanced Discord Bot.",
   "main": "index.js",
   "files": [
@@ -23,9 +23,6 @@
   ],
   "author": "DeadIndian",
   "license": "AGPL-3.0-only",
-  "dependencies": {
-    "node-cron": "^3.0.3"
-  },
   "peerDependencies": {
     "discord.js": ">=14.0.0",
     "mongoose": ">=7.0.0"

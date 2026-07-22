@@ -92,18 +92,22 @@ function createRemindCommand(ReminderModel, { maxPerUser = 25 } = {}) {
 			}
 
 			if (subcommand === "list") {
-				const reminders = await ReminderModel.find({
+				// No .sort() over RPC — fetch the array, order it here.
+				const pending = await ReminderModel.find({
 					guildId: interaction.guildId,
 					userId: interaction.user.id,
 					notified: false,
-				}).sort({ remindAt: 1 });
+				});
+				const reminders = pending.sort(
+					(a, b) => new Date(a.remindAt) - new Date(b.remindAt),
+				);
 
 				if (reminders.length === 0) {
 					return interaction.reply({ content: "You have no pending reminders.", ephemeral: true });
 				}
 
 				const lines = reminders.map(
-					(r) => `\`${r._id}\` — <t:${Math.floor(r.remindAt.getTime() / 1000)}:R> — ${r.message}`,
+					(r) => `\`${r._id}\` — <t:${Math.floor(new Date(r.remindAt).getTime() / 1000)}:R> — ${r.message}`,
 				);
 
 				return interaction.reply({ content: lines.join("\n"), ephemeral: true });
@@ -116,7 +120,7 @@ function createRemindCommand(ReminderModel, { maxPerUser = 25 } = {}) {
 					_id: id,
 					guildId: interaction.guildId,
 					userId: interaction.user.id,
-				}).catch(() => null);
+				});
 
 				if (!result || result.deletedCount === 0) {
 					return interaction.reply({ content: "No matching reminder found.", ephemeral: true });
