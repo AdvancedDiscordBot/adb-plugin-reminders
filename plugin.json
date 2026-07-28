@@ -1,7 +1,7 @@
 {
 	"name": "adb-plugin-reminders",
 	"displayName": "Reminders",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "Adds /remind to set, list, and cancel personal reminders. Delivers via DM with a channel fallback.",
 	"author": "DeadIndian",
 	"main": "index.js",
@@ -23,12 +23,23 @@
 		"storage": ["own-collection"],
 		"discord": ["SendMessages"],
 		"scheduler": ["cron"],
+		"hooks": ["subscribe"],
 		"network": { "outbound": [] },
 		"filesystem": { "read": [], "write": [] },
 		"childProcess": false,
 		"nativeAddons": false
 	},
 	"declaredDependencies": [],
+	"engines": {
+		"core": ">=2.0.0",
+		"plugins": { "administration": ">=2.0.0" }
+	},
+	"settings": {
+		"commandPermissions": true,
+		"schema": [
+			{ "key": "maxPerUser", "type": "number", "label": "Max reminders per user" }
+		]
+	},
 	"discordPermissions": ["SendMessages"],
 	"configSchema": {
 		"type": "object",
