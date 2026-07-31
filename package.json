@@ -1,6 +1,6 @@
 {
   "name": "adb-plugin-reminders",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Personal reminders (/remind set/list/cancel) for Advanced Discord Bot.",
   "main": "index.js",
   "files": [

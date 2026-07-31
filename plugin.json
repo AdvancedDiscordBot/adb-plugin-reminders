@@ -1,7 +1,7 @@
 {
 	"name": "adb-plugin-reminders",
 	"displayName": "Reminders",
-	"version": "1.2.0",
+	"version": "1.3.0",
 	"description": "Adds /remind to set, list, and cancel personal reminders. Delivers via DM with a channel fallback.",
 	"author": "DeadIndian",
 	"main": "index.js",
@@ -41,6 +41,28 @@
 		]
 	},
 	"discordPermissions": ["SendMessages"],
+	"webUi": {
+		"memberPages": [
+			{
+				"path": "/me/reminders",
+				"label": "My Reminders",
+				"icon": "Clock",
+				"source": { "model": "reminder", "scope": "member", "sort": { "remindAt": 1 }, "limit": 200 },
+				"view": {
+					"type": "table",
+					"empty": "You have no reminders set in this server.",
+					"columns": [
+						{ "field": "message", "label": "Reminder" },
+						{ "field": "remindAt", "label": "When" },
+						{ "field": "notified", "label": "Sent" }
+					],
+					"actions": [
+						{ "id": "cancel", "label": "Cancel", "op": "delete" }
+					]
+				}
+			}
+		]
+	},
 	"configSchema": {
 		"type": "object",
 		"properties": {
