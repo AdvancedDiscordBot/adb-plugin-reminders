@@ -5,7 +5,7 @@
 	"description": "Adds /remind to set, list, and cancel personal reminders. Delivers via DM with a channel fallback.",
 	"author": "DeadIndian",
 	"main": "index.js",
-	"requiresRestart": false,
+	"requiresRestart": true,
 	"isolation": true,
 	"manifestVersion": 2,
 	"process": {
