@@ -1,7 +1,7 @@
 {
 	"name": "adb-plugin-reminders",
 	"displayName": "Reminders",
-	"version": "1.3.0",
+	"version": "1.4.0",
 	"description": "Adds /remind to set, list, and cancel personal reminders. Delivers via DM with a channel fallback.",
 	"author": "DeadIndian",
 	"main": "index.js",
